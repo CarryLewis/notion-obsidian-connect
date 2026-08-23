@@ -2,7 +2,7 @@
 source: notion
 source_id: "de05e445-36cb-4926-b1aa-737f43fb3d90"
 created: 2026-08-12
-updated: 2026-08-13
+updated: 2026-08-23
 ---
 
 # Reading triggered Thinking Vault idea
@@ -13,7 +13,7 @@ updated: 2026-08-13
 
 ## Context
 
-[[Distant knowledge]]; [[Reading as trigger]]; [[Thinking system as processing layer]]
+[[Thinking system]]; [[Reading as trigger]]; [[Distant knowledge]]
 
 ## Observation
 

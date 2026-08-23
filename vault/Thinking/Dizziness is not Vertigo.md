@@ -2,7 +2,7 @@
 source: notion
 source_id: "aedc5e6c-ddf7-48f0-b2dc-b127ed7446a2"
 created: 2026-08-12
-updated: 2026-08-13
+updated: 2026-08-23
 ---
 
 # Dizziness is not Vertigo
@@ -13,7 +13,7 @@ updated: 2026-08-13
 
 ## Context
 
-[[Ambiguous clinical signals]]; [[Patient language]]; [[Observation before diagnosis]]
+[[Clinical reasoning]]; [[Patient language]]; [[Observation before diagnosis]]
 
 ## Observation
 
@@ -31,3 +31,5 @@ updated: 2026-08-13
 
 - 患者具体是旋转感还是头重脚轻？
 - 临床沟通中「头晕」如何被误分类？
+
+#clinical #neurology

@@ -2,7 +2,7 @@
 source: notion
 source_id: "53e7b170-e102-41ec-8133-406f06324147"
 created: 2026-08-14
-updated: 2026-08-14
+updated: 2026-08-23
 ---
 
 # Obisc workflow as public methodology
@@ -13,7 +13,7 @@ updated: 2026-08-14
 
 ## Context
 
-[[Workflow-first product thinking]]; [[Public methodology]]; [[Personal knowledge observatory]]
+[[Thinking system]]; [[Public methodology]]; [[Knowledge observatory]]
 
 ## Observation
 

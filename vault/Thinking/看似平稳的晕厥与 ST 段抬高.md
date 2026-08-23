@@ -2,7 +2,7 @@
 source: notion
 source_id: "c7801d9b-7269-4953-b933-2e353fa07eb5"
 created: 2026-08-12
-updated: 2026-08-13
+updated: 2026-08-23
 ---
 
 # 看似平稳的晕厥与 ST 段抬高
@@ -13,7 +13,7 @@ updated: 2026-08-13
 
 ## Context
 
-[[Ambiguous clinical signals]]; [[Clinical risk sensemaking]]; [[Observation before diagnosis]]
+[[Clinical reasoning]]; [[Risk sensemaking]]; [[Observation before diagnosis]]
 
 ## Observation
 
@@ -127,3 +127,5 @@ ST 段抬高的具体性质仍不确定；晕厥样发作与 ECG 异常之间是
 - 而是在观察、解释、不确定和下一步问题之间保持清醒。
 
 这次病例让我看到自己目前缺少的不是某一个知识点，而是对“晕厥患者初步评估流程”的临床直觉。
+
+#clinical #medicine

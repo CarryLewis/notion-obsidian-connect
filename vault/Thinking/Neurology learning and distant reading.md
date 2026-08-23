@@ -2,7 +2,7 @@
 source: notion
 source_id: "3bf400e8-b3ea-4885-b3df-11d59336368e"
 created: 2026-08-12
-updated: 2026-08-13
+updated: 2026-08-23
 ---
 
 # Neurology learning and distant reading
@@ -13,7 +13,7 @@ updated: 2026-08-13
 
 ## Context
 
-[[Distant knowledge]]; [[Sensemaking across distance]]; [[Learning as reconstruction]]
+[[Medical learning workflow]]; [[Distant knowledge]]; [[Learning as reconstruction]]
 
 ## Observation
 
@@ -48,3 +48,5 @@ updated: 2026-08-13
 这种隔阂不是单纯的“不懂”，而更像是自己和一个庞大作品之间的距离：它已经在那里存在了很久，有自己的历史、语言、结构和内部回声；而我正在试图抬头仰望它，拼凑它，理解它，找到一个答案或结果。
 
 这里重要的不是马上把神经医学知识整理成体系，而是保留这种学习的体验：共鸣和陌生同时发生，理解和距离同时存在。神经医学不是一组等待背诵的信息，而像一个遥远但召唤人的作品，需要慢慢靠近。
+
+#medicine #neurology

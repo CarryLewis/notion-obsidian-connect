@@ -2,7 +2,7 @@
 source: notion
 source_id: "26975f31-b9a0-4fdd-922f-a7e34620be27"
 created: 2026-08-13
-updated: 2026-08-13
+updated: 2026-08-23
 ---
 
 # Forward and backward reasoning and distance from the object
@@ -15,7 +15,7 @@ updated: 2026-08-13
 
 ## Context
 
-[[Forward and backward reasoning]]; [[Distant knowledge]]; [[Observation before diagnosis]]
+[[Clinical reasoning]]; [[Distant knowledge]]; [[Observation before diagnosis]]
 
 ## Observation
 
@@ -71,3 +71,5 @@ USMLE 题干给的永远是一个具体病人和一串具体表现。今天的�
 ### 现在的立场
 
 我预计这个问题会伴随整个本科阶段。所以要有意识地把 A→B 和 B→A 当成两条独立的思维路径分别思考、分别辨别，并且在卡住的时候先判断：这是路径问题，还是距离问题。
+
+#clinical
