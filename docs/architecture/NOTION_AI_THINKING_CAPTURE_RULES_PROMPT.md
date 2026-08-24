@@ -198,7 +198,8 @@ medicine, neurology
 
 1. Put the prompt above into Notion AI custom instructions (or paste at session start).
 2. Also paste the Context hard constraints from [NOTION_AI_CONTEXT_WIKILINK_PROMPT.md](NOTION_AI_CONTEXT_WIKILINK_PROMPT.md) into the same standing instructions (includes the live vocabulary).
-3. Talk naturally; let AI clarify. When it proposes Context, confirm the **one** existing anchor before saving.
+3. A live copy is published to the Notion page **Thinking Vault — Notion AI Instructions** (sibling of the Thinking database; not synced to Obsidian). @ that page, or copy from it.
+4. Talk naturally; let AI clarify. When it proposes Context, confirm the **one** existing anchor before saving.
 4. When ready, say：`保存到 Thinking 属性，并写页面正文`.
 5. Copy `【字段】` into properties; paste `【Page Body】` into the page body.
 6. Confirm **Related Information** via Relation UI.

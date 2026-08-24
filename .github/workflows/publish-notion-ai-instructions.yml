@@ -1,0 +1,60 @@
+# Publish Thinking Vault Notion AI standing instructions to a Notion page.
+#
+# Required repository secrets:
+#   NOTION_TOKEN
+#   NOTION_THINKING_DATABASE_ID
+#
+# The page is a sibling of the Thinking database (not a DB row), so it is not
+# synced into Obsidian Thinking/.
+
+name: Publish Notion AI Instructions
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "docs/architecture/NOTION_AI_THINKING_CAPTURE_RULES_PROMPT.md"
+      - "docs/architecture/NOTION_AI_CONTEXT_WIKILINK_PROMPT.md"
+      - "backend/app/services/thinking_vault/publish_instructions.py"
+      - "backend/app/cli/publish_notion_instructions.py"
+      - ".github/workflows/publish-notion-ai-instructions.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-notion-ai-instructions
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r backend/requirements.txt
+
+      - name: Publish instructions page
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_THINKING_DATABASE_ID: ${{ secrets.NOTION_THINKING_DATABASE_ID }}
+          PYTHONPATH: ${{ github.workspace }}/backend
+        run: |
+          set -euo pipefail
+          if [ -z "${NOTION_TOKEN:-}" ] || [ -z "${NOTION_THINKING_DATABASE_ID:-}" ]; then
+            echo "Missing secrets NOTION_TOKEN and/or NOTION_THINKING_DATABASE_ID" >&2
+            exit 1
+          fi
+          python -m app.cli.publish_notion_instructions
