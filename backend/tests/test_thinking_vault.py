@@ -12,6 +12,7 @@ from app.services.thinking_vault.adapter import NotionThinkingAdapter
 from app.services.thinking_vault.model import ThinkingConnection, ThinkingObject
 from app.services.thinking_vault.normalizer import normalize_page, rich_text_to_plain
 from app.services.thinking_vault.notion_client import NotionClient
+from app.services.thinking_vault.publish_instructions import PAGE_TITLE
 from app.services.thinking_vault.sync import apply_thinking_objects
 from app.services.thinking_vault.writer import (
     format_context_wikilinks,
@@ -522,6 +523,27 @@ def test_nested_folder_membership(db_session, vault_path: Path):
     nested = vault_path / "Thinking" / "Parent theme" / "Child theme" / "Leaf.md"
     assert nested.is_file()
     assert "nested" in nested.read_text(encoding="utf-8")
+
+
+def test_apply_skips_notion_ai_instruction_page(db_session, vault_path: Path):
+    meta = ThinkingObject(
+        title=PAGE_TITLE,
+        source_id="instr-1",
+        status="folder",
+        updated_at="2026-08-12T10:00:00.000Z",
+        page_body="standing instructions",
+    )
+    note = ThinkingObject(
+        title="Keep me",
+        source_id="note-1",
+        raw_thought="keep",
+        updated_at="2026-08-12T10:00:00.000Z",
+    )
+    result = apply_thinking_objects(db_session, [meta, note], vault_path=str(vault_path))
+    assert result.errors == []
+    assert (vault_path / "Thinking" / "Keep me.md").is_file()
+    assert not (vault_path / "Thinking" / PAGE_TITLE).exists()
+    assert not (vault_path / "Thinking" / f"{PAGE_TITLE}.md").exists()
 
 
 def test_adapter_with_mocked_notion(db_session, vault_path: Path):

@@ -158,6 +158,19 @@ def page_url(page_id: str) -> str:
     return f"https://www.notion.so/{_normalize_id(page_id).replace('-', '')}"
 
 
+def _api_error_detail(body: Any) -> str:
+    if isinstance(body, dict):
+        code = str(body.get("code") or "").strip()
+        message = str(body.get("message") or "").strip()
+        return " ".join(p for p in (code, message) if p)[:500]
+    return str(body)[:500]
+
+
+def is_instruction_meta_page(title: str) -> bool:
+    """True for the Notion-only AI instructions page (must not sync to Obsidian)."""
+    return (title or "").strip() == PAGE_TITLE
+
+
 def _title_plain(page: dict[str, Any]) -> str:
     props = page.get("properties") or {}
     for value in props.values():
@@ -177,7 +190,7 @@ class NotionInstructionPublisher:
     def __init__(self, token: str, *, timeout: float = 45.0) -> None:
         if not (token or "").strip():
             raise NotionAPIError("NOTION_TOKEN is empty")
-        self.token = token.strip(        )
+        self.token = token.strip()
         self._client = httpx.Client(
             base_url=NOTION_API_BASE,
             timeout=timeout,
@@ -205,7 +218,7 @@ class NotionInstructionPublisher:
             except Exception:  # noqa: BLE001
                 body = resp.text
             raise NotionAPIError(
-                f"Notion API {resp.status_code} for {method} {path}",
+                f"Notion API {resp.status_code} for {method} {path}: {_api_error_detail(body)}",
                 status_code=resp.status_code,
                 body=body,
             )
@@ -228,20 +241,41 @@ class NotionInstructionPublisher:
         )
         return list(data.get("results") or [])
 
-    def find_instruction_page(self) -> dict[str, Any] | None:
+    def find_instruction_page(self, database_id: str) -> dict[str, Any] | None:
+        data = self._request(
+            "POST",
+            f"/databases/{_normalize_id(database_id)}/query",
+            json={
+                "page_size": 20,
+                "filter": {
+                    "property": "Name",
+                    "title": {"equals": PAGE_TITLE},
+                },
+            },
+        )
+        for page in data.get("results") or []:
+            if _title_plain(page) == PAGE_TITLE:
+                return page
         for page in self.search_pages(PAGE_TITLE):
             if _title_plain(page) == PAGE_TITLE:
                 return page
         return None
 
-    def create_page(self, parent: dict[str, Any], children: list[dict[str, Any]]) -> dict[str, Any]:
+    def create_page(
+        self,
+        parent: dict[str, Any],
+        children: list[dict[str, Any]],
+        *,
+        properties: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
         first, rest = children[:CHILDREN_PER_REQUEST], children[CHILDREN_PER_REQUEST:]
         created = self._request(
             "POST",
             "/pages",
             json={
                 "parent": parent,
-                "properties": {
+                "properties": properties
+                or {
                     "title": {
                         "title": [{"type": "text", "text": {"content": PAGE_TITLE}}]
                     }
@@ -253,6 +287,33 @@ class NotionInstructionPublisher:
         if rest and page_id:
             self.append_children(page_id, rest)
         return created
+
+    def create_database_row(
+        self, database_id: str, children: list[dict[str, Any]]
+    ) -> dict[str, Any]:
+        """Create inside the Thinking DB (integration already has access). Status=folder keeps body Notion-only."""
+        return self.create_page(
+            {"type": "database_id", "database_id": _normalize_id(database_id)},
+            children,
+            properties={
+                "Name": {
+                    "title": [{"type": "text", "text": {"content": PAGE_TITLE}}]
+                },
+                "Status": {"select": {"name": "folder"}},
+                "Raw Thought": {
+                    "rich_text": [
+                        {
+                            "type": "text",
+                            "text": {
+                                "content": (
+                                    "Notion AI standing instructions. Not a thinking capture."
+                                )
+                            },
+                        }
+                    ]
+                },
+            },
+        )
 
     def append_children(self, block_id: str, children: list[dict[str, Any]]) -> None:
         bid = _normalize_id(block_id)
@@ -314,22 +375,43 @@ def publish_instruction_page(
     """Create or update the standing-instructions page. Returns id/url/action."""
     blocks = instruction_page_blocks(repo_root)
     with NotionInstructionPublisher(token) as publisher:
-        existing = publisher.find_instruction_page()
+        existing = publisher.find_instruction_page(database_id)
+        parent_used = ""
         if existing and existing.get("id"):
             page_id = str(existing["id"])
             publisher.replace_children(page_id, blocks)
             action = "updated"
         else:
-            parent = publisher.parent_for_sibling_of_database(database_id)
-            created = publisher.create_page(parent, blocks)
+            failures: list[str] = []
+            created: dict[str, Any] | None = None
+            try:
+                parent_used = f"database_id:{database_id}"
+                created = publisher.create_database_row(database_id, blocks)
+            except NotionAPIError as exc:
+                failures.append(f"database row: {exc}")
+                logger.warning("Database instruction row create failed: %s", exc)
+            if created is None:
+                try:
+                    parent = publisher.parent_for_sibling_of_database(database_id)
+                    parent_used = str(parent)
+                    created = publisher.create_page(parent, blocks)
+                except NotionAPIError as ext:
+                    failures.append(f"sibling page: {ext}")
+                    raise NotionAPIError(
+                        "Could not publish Notion AI instructions. "
+                        + " | ".join(failures)
+                        + ". Grant the integration Insert/Update content on the Thinking database."
+                    ) from ext
             page_id = str(created.get("id") or "")
             action = "created"
         url = page_url(page_id)
-        logger.info("Notion AI instructions page %s: %s", action, url)
+        logger.info("Notion AI instructions page %s (%s): %s", action, parent_used, url)
+        print(f"Published {action}: {url}", flush=True)
         return {
             "action": action,
             "page_id": page_id,
             "url": url,
             "title": PAGE_TITLE,
+            "parent": parent_used,
             "block_count": len(blocks),
         }

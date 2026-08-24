@@ -6,6 +6,7 @@ from app.services.thinking_vault.publish_instructions import (
     code_blocks,
     extract_fenced_blocks,
     instruction_page_blocks,
+    is_instruction_meta_page,
     load_instruction_docs,
 )
 
@@ -53,6 +54,11 @@ def test_instruction_page_blocks_include_both_prompts():
     assert "Capture Rules" in joined
     assert "Patient language" in joined
     assert "Clinical reasoning" in joined
+
+
+def test_instruction_meta_page_detector():
+    assert is_instruction_meta_page(PAGE_TITLE)
+    assert not is_instruction_meta_page("Dizziness is not Vertigo")
 
 
 def json_text(blocks: list[dict]) -> str:
