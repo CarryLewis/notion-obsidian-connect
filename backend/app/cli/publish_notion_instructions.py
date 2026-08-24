@@ -11,7 +11,11 @@ import json
 import sys
 
 from ..config import get_settings
-from ..services.thinking_vault.publish_instructions import publish_instruction_page
+from ..services.thinking_vault.notion_client import NotionAPIError
+from ..services.thinking_vault.publish_instructions import (
+    WRITE_DENIED_HINT,
+    publish_instruction_page,
+)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -31,8 +35,20 @@ def main(argv: list[str] | None = None) -> int:
         print("NOTION_THINKING_DATABASE_ID is not configured", file=sys.stderr)
         return 2
 
-    result = publish_instruction_page(token=token, database_id=database_id)
-    print(json.dumps(result, ensure_ascii=False, indent=2))
+    try:
+        result = publish_instruction_page(token=token, database_id=database_id)
+    except NotionAPIError as exc:
+        denied = exc.status_code == 403 or "restricted_resource" in str(exc)
+        payload = {
+            "ok": False,
+            "error": "restricted_resource" if denied else "notion_api_error",
+            "message": str(exc),
+            "hint": WRITE_DENIED_HINT if denied else "",
+        }
+        print(json.dumps(payload, ensure_ascii=False, indent=2))
+        return 3 if denied else 1
+
+    print(json.dumps({"ok": True, **result}, ensure_ascii=False, indent=2))
     return 0
 
 

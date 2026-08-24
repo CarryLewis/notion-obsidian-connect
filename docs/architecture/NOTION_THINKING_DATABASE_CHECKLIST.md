@@ -12,6 +12,8 @@ Do **not** auto-create this schema from the API in V1 — set it up once by hand
 1. In Notion, create a full-page database named e.g. **Thinking**.
 2. Copy the database id from the URL (`notion.so/.../<database_id>?v=...`) into `.env` as `NOTION_THINKING_DATABASE_ID` (32 hex chars; dashes optional).
 3. Create an internal integration at [Notion My Integrations](https://www.notion.so/my-integrations), copy the secret into `NOTION_TOKEN`.
+   - Hourly vault sync only needs **Read content**.
+   - Publishing AI instructions to a Notion page also needs **Insert content** and **Update content**.
 4. Share the Thinking database (and any related Information DB if used) with that integration.
 
 ---

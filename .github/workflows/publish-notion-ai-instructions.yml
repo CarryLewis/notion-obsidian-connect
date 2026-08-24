@@ -4,20 +4,16 @@
 #   NOTION_TOKEN
 #   NOTION_THINKING_DATABASE_ID
 #
-# The page is a sibling of the Thinking database (not a DB row), so it is not
-# synced into Obsidian Thinking/.
+# The integration used for hourly Thinking sync is currently read-only
+# (POST /pages → 403 restricted_resource). Enable Insert + Update content
+# on the Notion integration, then run this workflow from Actions.
+#
+# Manual only: do not run on push (that would fail CI until write access exists).
 
 name: Publish Notion AI Instructions
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - "docs/architecture/NOTION_AI_THINKING_CAPTURE_RULES_PROMPT.md"
-      - "docs/architecture/NOTION_AI_CONTEXT_WIKILINK_PROMPT.md"
-      - "backend/app/services/thinking_vault/publish_instructions.py"
-      - "backend/app/cli/publish_notion_instructions.py"
-      - ".github/workflows/publish-notion-ai-instructions.yml"
 
 permissions:
   contents: read

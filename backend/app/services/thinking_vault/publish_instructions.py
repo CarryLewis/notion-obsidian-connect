@@ -20,6 +20,13 @@ from .notion_client import NOTION_API_BASE, NOTION_VERSION, NotionAPIError
 logger = logging.getLogger(__name__)
 
 PAGE_TITLE = "Thinking Vault — Notion AI Instructions"
+WRITE_DENIED_HINT = (
+    "The Notion integration token can read the Thinking database but cannot create "
+    "or edit pages (403 restricted_resource). Enable Insert content and Update content "
+    "at https://www.notion.so/my-integrations for this integration, then re-run "
+    "`python -m app.cli.publish_notion_instructions` or the GitHub Action "
+    "“Publish Notion AI Instructions”."
+)
 RICH_TEXT_LIMIT = 1900
 CHILDREN_PER_REQUEST = 100
 DELETE_PAUSE_SEC = 0.35
@@ -397,10 +404,11 @@ def publish_instruction_page(
                     created = publisher.create_page(parent, blocks)
                 except NotionAPIError as ext:
                     failures.append(f"sibling page: {ext}")
+                    combined = " | ".join(failures)
                     raise NotionAPIError(
-                        "Could not publish Notion AI instructions. "
-                        + " | ".join(failures)
-                        + ". Grant the integration Insert/Update content on the Thinking database."
+                        f"Could not publish Notion AI instructions. {combined}. {WRITE_DENIED_HINT}",
+                        status_code=ext.status_code,
+                        body=ext.body,
                     ) from ext
             page_id = str(created.get("id") or "")
             action = "created"
