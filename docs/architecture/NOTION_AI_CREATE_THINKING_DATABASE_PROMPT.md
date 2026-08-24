@@ -34,6 +34,7 @@ Property **display names** must match exactly (English), unless you later change
 5. Raw Thought — Text / Rich text
    说明：保存用户原始表达；AI 永远不要用润色后的摘要覆盖它
 6. Context — Text / Rich text
+   说明：可复用思考锚点；默认 1 个、最多 2 个；从已有词表选；同步为 Obsidian ## Context 的 [[wikilink]]
 7. Observation — Text / Rich text
 8. Interpretation — Text / Rich text
 9. Uncertainty — Text / Rich text
@@ -70,7 +71,7 @@ Name | Status | Raw Thought | Context | Tags | Observation | Interpretation | Un
 - Name: Dizziness is not Vertigo
 - Status: developing
 - Raw Thought: 今天夜班碰到一个患者，他一直说头晕，但是我感觉他根本不是我们说的 vertigo。
-- Context: Neurology night shift；Clinical communication
+- Context: Clinical reasoning
 - Tags: medicine, neurology, clinical
 - Observation: 患者反复使用「头晕」描述症状
 - Interpretation: 患者的「头晕」可能不等于临床分类上的 vertigo
@@ -85,7 +86,7 @@ Name | Status | Raw Thought | Context | Tags | Observation | Interpretation | Un
 1. Database 已创建，并列出所有属性名与类型
 2. 如何复制 database id（URL 中那串 id）以便配置同步
 3. 提醒：属性列保存结构化短字段；更细致的反思写在页面正文（会同步为 Obsidian ## Extended Reflection）
-4. 提醒：Tags → Obsidian 页底 #tag；Context → ## Context 的 [[wikilink]]；两者不要混用
+4. 提醒：Tags → Obsidian 页底 #tag；Context → ## Context 的 [[wikilink]]；两者不要混用。Context 默认 1 个已有锚点，最多 2 个，不要一次覆盖多个板块。
 5. 提醒：之后和 Notion AI 对话可以先澄清，但要同步的内容必须写入属性列和/或页面正文
 ```
 
