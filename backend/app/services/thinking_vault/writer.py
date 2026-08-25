@@ -113,27 +113,19 @@ def format_context_wikilinks(context: str) -> str:
 def render_markdown(obj: ThinkingObject) -> str:
     """Render minimal frontmatter + non-empty sections + page body + Connections.
 
-    Notion Tags become native Obsidian tags via YAML ``tags:`` (Properties /
-    tag pane) and a page-footer ``#tag`` line for inline search.
+    Notion Tags are written only as a page-footer ``#tag`` line — not YAML
+    ``tags:``. Empty Tags omit the footer (no ``## Tags`` section).
     """
-    footer_tags = [t.strip() for t in (obj.tags or []) if str(t or "").strip()]
     lines = [
         "---",
         "source: notion",
         f'source_id: "{_yaml_escape(obj.source_id)}"',
         f"created: {_date_only(obj.created_at)}",
         f"updated: {_date_only(obj.updated_at)}",
+        "---",
+        "",
+        f"# {obj.title}",
     ]
-    if footer_tags:
-        lines.append("tags:")
-        lines.extend([f"  - {t}" for t in footer_tags])
-    lines.extend(
-        [
-            "---",
-            "",
-            f"# {obj.title}",
-        ]
-    )
     for field_name in SECTION_FIELDS:
         body = (getattr(obj, field_name) or "").strip()
         if not body:
@@ -159,6 +151,7 @@ def render_markdown(obj: ThinkingObject) -> str:
             seen.add(title)
             lines.append(f"[[{title}]]")
 
+    footer_tags = [t.strip() for t in (obj.tags or []) if str(t or "").strip()]
     if footer_tags:
         lines.extend(["", " ".join(f"#{t}" for t in footer_tags)])
 

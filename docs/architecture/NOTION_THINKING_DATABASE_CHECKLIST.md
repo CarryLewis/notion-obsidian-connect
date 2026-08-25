@@ -33,7 +33,7 @@ Use these **display names** unless you override `thinking_vault.property_names` 
 | Uncertainty | Rich text | Optional |
 | Questions | Rich text | Optional; bullet lines OK |
 | Later Reflection | Rich text | Optional |
-| Tags | Multi-select | Controlled filter vocabulary (`medicine`, `neurology`, …). Syncs to Obsidian YAML `tags:` (Properties / tag pane) and page footer `#tag`. Must be Multi-select or Select — Text / Relation will not sync. Not Context. |
+| Tags | Multi-select | Controlled filter vocabulary (`medicine`, `neurology`, …). Syncs to Obsidian page footer as `#tag` only (not YAML `tags:`). Must be Multi-select or Select — Text / Relation will not sync. Not Context. |
 | Related Information | Relation | Link to other Thinking pages and/or Information pages |
 
 ---
@@ -45,7 +45,7 @@ Use these **display names** unless you override `thinking_vault.property_names` 
 - Free-form / dozens of ad-hoc tags outside the allowlist
 
 Allowed: one controlled **Tags** multi-select (filter labels only).  
-Context stays text anchors → `[[wikilink]]`; Tags stay multi-select → YAML `tags:` + footer `#tag`.
+Context stays text anchors → `[[wikilink]]`; Tags stay multi-select → footer `#tag` only.
 
 The database is an **index of thinking slots**, not an ontology.
 
@@ -85,7 +85,7 @@ Do **not** `git init` inside the iCloud Obsidian folder.
 - Empty properties → section omitted
 - `Related Information` → `## Connections` with `[[Target Name]]` (ordinary notes)
 - `Status=folder` → create `Thinking/{Name}/`; move Related members into that directory; **no** `.md` index note; folder props/body stay Notion-only
-- `Tags` → YAML `tags: [medicine, neurology]` **and** page-bottom `#medicine #neurology` (omitted when empty; no `## Tags` section; skipped for folders). Text / Relation columns are ignored.
+- `Tags` → page-bottom `#medicine #neurology` only (omitted when empty; no YAML `tags:`; no `## Tags` section; skipped for folders). Text / Relation columns are ignored.
 - `Context` → `## Context` with `[[anchors]]` (never as `#tag`)
 - Identity = Notion page id (`source_id` in frontmatter or folder sidecar), not filename
 

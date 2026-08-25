@@ -44,7 +44,7 @@ Related:
 - Status：raw / developing / connected / folder
 - Raw Thought：用户原文（一字不改）
 - Context：可复用思考锚点（分号分隔；同步为 Obsidian [[wikilink]]）——见专项规则
-- Tags：受控 Multi-select（过滤标签；同步到 Obsidian YAML tags: 与页底 #tag）——见专项规则
+- Tags：受控 Multi-select（过滤标签；同步到 Obsidian 页底 #tag，不写 YAML tags:）——见专项规则
 - Observation / Interpretation / Uncertainty / Questions / Later Reflection：短而清楚
 - Related Information（Relation）：确认后的关联；Status=folder 时表示文件夹成员
 - Status=folder：只同步标题为真实目录 + Related 成员；其它属性/正文仅 Notion AI 指导，不同步
@@ -63,7 +63,7 @@ Context 不是情景散文，而是会变成 Obsidian 链接的主题锚点。
 【Tags 专项（与 Context 严格区分）】
 Tags 是轻量过滤标签，不是思考锚点。
 - Notion：Multi-select「Tags」（只从既有选项选）
-- Obsidian：写入 YAML `tags:`（Properties / 标签面板）以及全文最底部一行 `#medicine #neurology`（不是 ## Tags 章节，也不进图谱）
+- Obsidian：只写在全文最底部一行，如 #medicine #neurology（不是 YAML `tags:`，不是 ## Tags 章节，也不进图谱）
 - Context = 思考节点（[[wikilink]]）；Tags = 过滤标签（#tag）
 - 同一概念不要两边都写；能「以后还要回来想」的用 Context，只想按科/主题筛的用 Tag
 - 词表：小写英文 kebab-case（medicine / neurology / clinical / ai / research …）；通常 0–3 个，最多 5 个
@@ -123,7 +123,7 @@ Tags 是轻量过滤标签，不是思考锚点。
 （可复用主题锚点；分号分隔；同步成 [[锚点]]）
 【Tags】
 medicine, neurology
-（仅从受控 Multi-select 选项中选；同步到 YAML tags: 与页底 #tag；可留空）
+（仅从受控 Multi-select 选项中选；同步到页底 #tag；可留空）
 【Observation】
 【Interpretation】这里放整理后的短理解
 【Uncertainty】
@@ -176,7 +176,7 @@ medicine, neurology
 4) 若思考需要展开，Page Body 有可读的细致反思
 5) 关联保守、可解释
 6) 我复制属性 + 粘贴正文后，即可 Sync 到 Obsidian
-   （属性 → 对应章节；正文 → ## Extended Reflection；Tags → YAML tags: + 页底 #tag）
+   （属性 → 对应章节；正文 → ## Extended Reflection；Tags → 页底 #tag）
 ```
 
 ---

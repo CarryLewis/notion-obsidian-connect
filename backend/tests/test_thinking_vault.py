@@ -196,8 +196,7 @@ def test_normalize_and_render_tags_at_page_bottom():
     assert "[[Clinical communication]]; [[Patient language of dizziness]]" in md
     assert "#Clinical communication" not in md  # Context ≠ hashtag
     assert "## Tags" not in md
-    # Native Obsidian tags live in YAML Properties (not only page-footer hashtags)
-    assert "tags:\n  - medicine\n  - neurology\n  - clinical\n  - todo\n  - review" in md
+    assert "\ntags:" not in md  # footer hashtags only — not YAML tags:
     assert md.rstrip().endswith("#medicine #neurology #clinical #todo #review")
     assert md.index("## Connections") < md.index("#medicine #neurology")
 
@@ -252,9 +251,9 @@ def test_empty_tags_omit_footer_and_hash_changes_with_tags():
     tagged_md = render_markdown(tagged)
     assert "#neurology" not in bare_md
     assert "\ntags:" not in bare_md
+    assert "\ntags:" not in tagged_md
     assert bare_md.rstrip().endswith("[[Night shift clinical reasoning]]")
     assert tagged_md.rstrip().endswith("#neurology")
-    assert "tags:\n  - neurology" in tagged_md
     assert bare.content_fingerprint() != tagged.content_fingerprint()
 
 
