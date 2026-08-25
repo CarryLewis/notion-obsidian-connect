@@ -2,14 +2,14 @@
 source: notion
 source_id: "9383e4ad-d67d-40bb-bd4b-76d2fb6ef59e"
 created: 2026-08-20
-updated: 2026-08-23
+updated: 2026-08-25
 ---
 
 # 个人网站 Identity Workshop 问题
 
 ## Context
 
-[[Personal identity architecture]]; [[Knowledge observatory]]; [[Public narrative]]
+[[Personal identity architecture]]; [[Public narrative]]
 
 ## Observation
 

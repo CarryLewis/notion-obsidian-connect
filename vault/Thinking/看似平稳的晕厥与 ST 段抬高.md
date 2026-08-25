@@ -2,7 +2,7 @@
 source: notion
 source_id: "c7801d9b-7269-4953-b933-2e353fa07eb5"
 created: 2026-08-12
-updated: 2026-08-23
+updated: 2026-08-25
 ---
 
 # 看似平稳的晕厥与 ST 段抬高
@@ -13,7 +13,7 @@ updated: 2026-08-23
 
 ## Context
 
-[[Clinical reasoning]]; [[Risk sensemaking]]; [[Observation before diagnosis]]
+[[Risk sensemaking]]
 
 ## Observation
 

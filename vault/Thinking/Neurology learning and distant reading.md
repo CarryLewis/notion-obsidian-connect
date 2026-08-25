@@ -2,7 +2,7 @@
 source: notion
 source_id: "3bf400e8-b3ea-4885-b3df-11d59336368e"
 created: 2026-08-12
-updated: 2026-08-23
+updated: 2026-08-25
 ---
 
 # Neurology learning and distant reading
@@ -13,7 +13,7 @@ updated: 2026-08-23
 
 ## Context
 
-[[Medical learning workflow]]; [[Distant knowledge]]; [[Learning as reconstruction]]
+[[Distant knowledge]]; [[Learning as reconstruction]]
 
 ## Observation
 

@@ -2,7 +2,7 @@
 source: notion
 source_id: "26975f31-b9a0-4fdd-922f-a7e34620be27"
 created: 2026-08-13
-updated: 2026-08-23
+updated: 2026-08-25
 ---
 
 # Forward and backward reasoning and distance from the object
@@ -15,7 +15,7 @@ updated: 2026-08-23
 
 ## Context
 
-[[Clinical reasoning]]; [[Distant knowledge]]; [[Observation before diagnosis]]
+[[Clinical reasoning]]; [[Distant knowledge]]
 
 ## Observation
 

@@ -2,7 +2,7 @@
 source: notion
 source_id: "667ee682-6e16-4058-8b26-ffbf34a7651d"
 created: 2026-08-23
-updated: 2026-08-23
+updated: 2026-08-25
 ---
 
 # Clinical workflow over diagnostic guessing
@@ -13,7 +13,7 @@ updated: 2026-08-23
 
 ## Context
 
-[[Clinical reasoning]]; [[Clinical workflow]]; [[Diagnostic closure]]
+[[Clinical workflow]]; [[Diagnostic closure]]
 
 ## Observation
 
