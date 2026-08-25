@@ -72,8 +72,22 @@ def extract_rich_text_prop(properties: dict[str, Any], name: str) -> str:
     return ""
 
 
-def extract_select_prop(properties: dict[str, Any], name: str) -> str:
+def _find_prop(properties: dict[str, Any], name: str) -> dict[str, Any] | None:
+    """Resolve a Notion property by exact name, then case-insensitive match."""
+    if not isinstance(properties, dict) or not name:
+        return None
     prop = properties.get(name)
+    if isinstance(prop, dict):
+        return prop
+    wanted = name.casefold()
+    for key, value in properties.items():
+        if str(key).casefold() == wanted and isinstance(value, dict):
+            return value
+    return None
+
+
+def extract_select_prop(properties: dict[str, Any], name: str) -> str:
+    prop = _find_prop(properties, name)
     if not isinstance(prop, dict):
         return ""
     if prop.get("type") == "select":
@@ -87,7 +101,7 @@ def extract_select_prop(properties: dict[str, Any], name: str) -> str:
 
 def extract_multi_select_prop(properties: dict[str, Any], name: str) -> list[str]:
     """Return option names from a Notion multi_select property."""
-    prop = properties.get(name)
+    prop = _find_prop(properties, name)
     if not isinstance(prop, dict) or prop.get("type") != "multi_select":
         return []
     items = prop.get("multi_select") or []
@@ -98,6 +112,24 @@ def extract_multi_select_prop(properties: dict[str, Any], name: str) -> list[str
         if isinstance(item, dict) and item.get("name"):
             out.append(str(item["name"]))
     return out
+
+
+def extract_tags_prop(properties: dict[str, Any], name: str) -> list[str]:
+    """Read Notion Tags: multi_select preferred, single select accepted.
+
+    Obsidian only sees tags that this extractor returns. A Tags column that is
+    Text / Relation / Status yields an empty list (by design — not a tag field).
+    """
+    prop = _find_prop(properties, name)
+    if not isinstance(prop, dict):
+        return []
+    ptype = prop.get("type")
+    if ptype == "multi_select":
+        return extract_multi_select_prop({name: prop}, name)
+    if ptype == "select":
+        label = extract_select_prop({name: prop}, name)
+        return [label] if label else []
+    return []
 
 
 def extract_relation_ids(properties: dict[str, Any], name: str) -> list[str]:
@@ -143,7 +175,7 @@ def normalize_page(
             continue
         connections.append(ThinkingConnection(title=rel_title, source_id=rel_id))
 
-    tags = normalize_filter_tags(extract_multi_select_prop(props, names["tags"]))
+    tags = normalize_filter_tags(extract_tags_prop(props, names["tags"]))
 
     return ThinkingObject(
         title=title,

@@ -43,7 +43,7 @@ Property **display names** must match exactly (English), unless you later change
     选项从现有词表起步，例如：
     medicine, ai, neuroscience, cardiology, neurology, technology,
     economics, biology, research, clinical, important, todo, review, stroke, ecg
-    说明：同步到 Obsidian 页底 #tag；与 Context（[[wikilink]]）严格区分
+    说明：同步到 Obsidian YAML `tags:` 与页底 #tag；与 Context（[[wikilink]]）严格区分
 13. Related Information — Relation
     - 允许关联本 Thinking 数据库中的其他条目
     - 如果工作区已有 Information / Library 类数据库，也允许关联那些页面
@@ -85,7 +85,7 @@ Name | Status | Raw Thought | Context | Tags | Observation | Interpretation | Un
 1. Database 已创建，并列出所有属性名与类型
 2. 如何复制 database id（URL 中那串 id）以便配置同步
 3. 提醒：属性列保存结构化短字段；更细致的反思写在页面正文（会同步为 Obsidian ## Extended Reflection）
-4. 提醒：Tags → Obsidian 页底 #tag；Context → ## Context 的 [[wikilink]]；两者不要混用
+4. 提醒：Tags → Obsidian YAML `tags:` + 页底 #tag；Context → ## Context 的 [[wikilink]]；两者不要混用
 5. 提醒：之后和 Notion AI 对话可以先澄清，但要同步的内容必须写入属性列和/或页面正文
 ```
 

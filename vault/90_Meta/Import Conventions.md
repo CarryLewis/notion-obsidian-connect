@@ -87,7 +87,7 @@ Do not use type tags like `paper` / `article` in frontmatter.
 | | **Context** | **Tags** |
 |---|---|---|
 | Notion | Text (`;` / `；`) | Multi-select `Tags` |
-| Obsidian | `## Context` → `[[wikilink]]` | Page **footer** → `#tag` |
-| Role | Thinking anchors (enter the graph) | Filter labels (search only) |
+| Obsidian | `## Context` → `[[wikilink]]` | YAML `tags:` **and** page footer `#tag` |
+| Role | Thinking anchors (enter the graph) | Filter labels (search / Properties only) |
 
-Rules: do not put Context phrases into Tags; do not invent free-form tags; AI must not infer Tags from Raw Thought / Context. Empty Tags omit the footer line (no `## Tags` section).
+Rules: do not put Context phrases into Tags; do not invent free-form tags; AI must not infer Tags from Raw Thought / Context. Empty Tags omit both the YAML `tags:` key and the footer line (no `## Tags` section).

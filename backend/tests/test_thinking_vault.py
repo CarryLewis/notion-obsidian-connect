@@ -10,7 +10,11 @@ import pytest
 
 from app.services.thinking_vault.adapter import NotionThinkingAdapter
 from app.services.thinking_vault.model import ThinkingConnection, ThinkingObject
-from app.services.thinking_vault.normalizer import normalize_page, rich_text_to_plain
+from app.services.thinking_vault.normalizer import (
+    extract_tags_prop,
+    normalize_page,
+    rich_text_to_plain,
+)
 from app.services.thinking_vault.notion_client import NotionClient
 from app.services.thinking_vault.sync import apply_thinking_objects
 from app.services.thinking_vault.writer import (
@@ -192,8 +196,42 @@ def test_normalize_and_render_tags_at_page_bottom():
     assert "[[Clinical communication]]; [[Patient language of dizziness]]" in md
     assert "#Clinical communication" not in md  # Context ≠ hashtag
     assert "## Tags" not in md
+    # Native Obsidian tags live in YAML Properties (not only page-footer hashtags)
+    assert "tags:\n  - medicine\n  - neurology\n  - clinical\n  - todo\n  - review" in md
     assert md.rstrip().endswith("#medicine #neurology #clinical #todo #review")
     assert md.index("## Connections") < md.index("#medicine #neurology")
+
+
+def test_extract_tags_accepts_select_and_case_insensitive_name():
+    page = _page(
+        "11111111-1111-1111-1111-111111111111",
+        "Select Tags",
+        tags=["Neurology"],
+    )
+    # Simulate a single-select Tags column (common Notion setup mistake)
+    page["properties"]["Tags"] = {
+        "id": "tags",
+        "type": "select",
+        "select": {"name": "Clinical"},
+    }
+    obj = normalize_page(page)
+    assert obj.tags == ["clinical"]
+
+    # Case-insensitive property name (e.g. "tags" vs configured "Tags")
+    page["properties"]["tags"] = page["properties"].pop("Tags")
+    assert extract_tags_prop(page["properties"], "Tags") == ["Clinical"]
+    obj = normalize_page(page)
+    assert obj.tags == ["clinical"]
+
+    # Text / Relation Tags columns must not silently become Obsidian tags
+    page["properties"]["tags"] = {
+        "id": "tags",
+        "type": "rich_text",
+        "rich_text": _rich("medicine"),
+    }
+    assert extract_tags_prop(page["properties"], "Tags") == []
+    obj = normalize_page(page)
+    assert obj.tags == []
 
 
 def test_empty_tags_omit_footer_and_hash_changes_with_tags():
@@ -213,8 +251,10 @@ def test_empty_tags_omit_footer_and_hash_changes_with_tags():
     bare_md = render_markdown(bare)
     tagged_md = render_markdown(tagged)
     assert "#neurology" not in bare_md
+    assert "\ntags:" not in bare_md
     assert bare_md.rstrip().endswith("[[Night shift clinical reasoning]]")
     assert tagged_md.rstrip().endswith("#neurology")
+    assert "tags:\n  - neurology" in tagged_md
     assert bare.content_fingerprint() != tagged.content_fingerprint()
 
 
