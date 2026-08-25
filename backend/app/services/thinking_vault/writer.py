@@ -111,7 +111,11 @@ def format_context_wikilinks(context: str) -> str:
 
 
 def render_markdown(obj: ThinkingObject) -> str:
-    """Render minimal frontmatter + non-empty sections + page body + Connections."""
+    """Render minimal frontmatter + non-empty sections + page body + Connections.
+
+    Notion Tags are written only as a page-footer ``#tag`` line — not YAML
+    ``tags:``. Empty Tags omit the footer (no ``## Tags`` section).
+    """
     lines = [
         "---",
         "source: notion",
