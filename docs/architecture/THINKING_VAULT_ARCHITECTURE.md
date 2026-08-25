@@ -145,7 +145,7 @@ Empty properties / empty page body are omitted on export. Raw Thought must never
 | Updated | Last edited time | `updated_at` | frontmatter `updated` |
 | Status | Select | `status` | index/log only (not graph); `folder` triggers directory sync |
 | Raw Thought | Rich text | `raw_thought` | `## Raw Thought` (skipped when Status=`folder`) |
-| Context | Rich text | `context` | `## Context` as `[[A]]; [[B]]` (semicolon-separated anchors; skipped for `folder`) |
+| Context | Rich text | `context` | `## Context` as `[[A]]` or `[[A]]; [[B]]` (default 1 existing anchor, max 2; skipped for `folder`) |
 | Observation | Rich text | `observation` | `## Observation` (skipped for `folder`) |
 | Interpretation | Rich text | `interpretation` | `## Interpretation` (skipped for `folder`) |
 | Uncertainty | Rich text | `uncertainty` | `## Uncertainty` (skipped for `folder`) |

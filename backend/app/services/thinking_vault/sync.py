@@ -18,7 +18,7 @@ from ...db import ThinkingSyncState, utcnow
 from ...utils import content_hash, workspace_config_dict
 from .adapter import NotionThinkingAdapter
 from .model import ThinkingObject
-from .notion_client import NotionAPIError, NotionClient
+from .publish_instructions import is_instruction_meta_page
 from .writer import (
     WriteResult,
     archive_root,
@@ -346,9 +346,10 @@ def apply_thinking_objects(
     notes_base = notes_root(vault, cfg)
     hydrate_sync_state_from_vault(db, vault, cfg=cfg)
 
+    seen_ids: set[str] = {o.source_id for o in objects if o.source_id}
+    objects = [o for o in objects if not is_instruction_meta_page(o.title)]
     folders = [o for o in objects if o.is_folder() and o.source_id]
     notes = [o for o in objects if not o.is_folder() and o.source_id]
-    seen_ids: set[str] = {o.source_id for o in objects if o.source_id}
 
     note_owner, parent_of, cycle_errors = build_membership(
         folders, notes, warnings=result.warnings

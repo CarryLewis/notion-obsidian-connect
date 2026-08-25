@@ -12,6 +12,8 @@ Do **not** auto-create this schema from the API in V1 — set it up once by hand
 1. In Notion, create a full-page database named e.g. **Thinking**.
 2. Copy the database id from the URL (`notion.so/.../<database_id>?v=...`) into `.env` as `NOTION_THINKING_DATABASE_ID` (32 hex chars; dashes optional).
 3. Create an internal integration at [Notion My Integrations](https://www.notion.so/my-integrations), copy the secret into `NOTION_TOKEN`.
+   - Hourly vault sync only needs **Read content**.
+   - Publishing AI instructions to a Notion page also needs **Insert content** and **Update content**.
 4. Share the Thinking database (and any related Information DB if used) with that integration.
 
 ---
@@ -27,7 +29,7 @@ Use these **display names** unless you override `thinking_vault.property_names` 
 | Updated | Last edited time | Built-in last edited time |
 | Status | Select | Options: `raw`, `developing`, `connected`, `folder` |
 | Raw Thought | Rich text | Original expression — never overwritten by AI polish |
-| Context | Rich text | Optional |
+| Context | Rich text | Optional. Reusable thinking anchors; default 1, max 2; reuse existing vocabulary. Syncs as `[[wikilink]]`. |
 | Observation | Rich text | Optional |
 | Interpretation | Rich text | Optional |
 | Uncertainty | Rich text | Optional |
@@ -45,7 +47,7 @@ Use these **display names** unless you override `thinking_vault.property_names` 
 - Free-form / dozens of ad-hoc tags outside the allowlist
 
 Allowed: one controlled **Tags** multi-select (filter labels only).  
-Context stays text anchors → `[[wikilink]]`; Tags stay multi-select → footer `#tag`.
+Context stays a **small closed set of text anchors** → `[[wikilink]]` (default 1, max 2, reuse existing terms). Tags stay multi-select → footer `#tag`.
 
 The database is an **index of thinking slots**, not an ontology.
 
@@ -86,7 +88,7 @@ Do **not** `git init` inside the iCloud Obsidian folder.
 - `Related Information` → `## Connections` with `[[Target Name]]` (ordinary notes)
 - `Status=folder` → create `Thinking/{Name}/`; move Related members into that directory; **no** `.md` index note; folder props/body stay Notion-only
 - `Tags` → page-bottom `#medicine #neurology` (omitted when empty; no `## Tags` section; skipped for folders)
-- `Context` → `## Context` with `[[anchors]]` (never as `#tag`)
+- `Context` → `## Context` with `[[anchors]]` (never as `#tag`). Prefer **1** existing anchor per note, **max 2**. Do not cover multiple topic boards in one field.
 - Identity = Notion page id (`source_id` in frontmatter or folder sidecar), not filename
 
 ---

@@ -7,6 +7,7 @@ Goal: every capture follows the Thinking Vault contract:
 
 Related:
 - Database setup: [NOTION_AI_CREATE_THINKING_DATABASE_PROMPT.md](NOTION_AI_CREATE_THINKING_DATABASE_PROMPT.md)
+- Context field (wikilink vocabulary): [NOTION_AI_CONTEXT_WIKILINK_PROMPT.md](NOTION_AI_CONTEXT_WIKILINK_PROMPT.md)
 - Checklist: [NOTION_THINKING_DATABASE_CHECKLIST.md](NOTION_THINKING_DATABASE_CHECKLIST.md)
 
 ---
@@ -31,9 +32,10 @@ Related:
 4. 永远保留用户原始表达到 Raw Thought。AI 可以整理，但绝不能用润色版覆盖原文。
 5. 属性列保持精炼；把更具体、更细致、更长的反思写在页面正文。
 6. 不完整的思考也是合法的。想不清的字段留空，不要硬填。
-7. 不要发明分类体系：不要加 domain / category / topic / priority / maturity。允许受控 Multi-select「Tags」，禁止自由发明标签词。
+7. 不要发明分类体系：不要加 domain / category / topic / priority / maturity。允许受控 Multi-select「Tags」，禁止自由发明标签词。Context 也禁止自由发明锚点，只许复用已有词表。
 8. 不要自动制造大量关联。只在意义明确时建议连接，并等我确认后再写入 Relation。
 9. 标题要短、稳定、适合做文件名；避免 / \ : * ? " < > |。
+10. Context 默认只写 1 个已有锚点；不要为了完整而覆盖多个板块。
 
 ====================
 二、双层内容合同
@@ -43,22 +45,27 @@ Related:
 - Name（Title）：短标题
 - Status：raw / developing / connected / folder
 - Raw Thought：用户原文（一字不改）
-- Context：可复用思考锚点（分号分隔；同步为 Obsidian [[wikilink]]）——见专项规则
+- Context：这条思考所属的 1 个（最多 2 个）已有锚点；同步为 Obsidian [[wikilink]]——见专项规则
 - Tags：受控 Multi-select（过滤标签；同步到 Obsidian 页底 #tag）——见专项规则
 - Observation / Interpretation / Uncertainty / Questions / Later Reflection：短而清楚
 - Related Information（Relation）：确认后的关联；Status=folder 时表示文件夹成员
 - Status=folder：只同步标题为真实目录 + Related 成员；其它属性/正文仅 Notion AI 指导，不同步
 
 【Context 专项（非常重要）】
-Context 不是情景散文，而是会变成 Obsidian 链接的主题锚点。
-格式：锚点A；锚点B；锚点C
-要求：
-1. 概括性：每个词条能唤起一整块思考，不写当下细节句
-2. 一致性：优先复用同领域已有标题，避免近义改名造成图分裂
-3. 短词覆盖：2–6 词（或中文短短语）压成一个可复用概念名；单次 1–3 个，最多 4 个
+Context 不是情景散文，不是目录，也不是摘要。
+它只回答：这条思考以后要反复回到哪一个已有节点。
+格式：默认 1 个锚点；例外才「锚点A；锚点B」
+硬约束：
+1. 单一归属：默认 1 个，最多 2 个；禁止 3 个及以上；禁止一次覆盖多个板块
+2. 词表复用：必须从已有 Context 词表原词选取；找不到则留空或标【候选新锚点：…】等确认；禁止直接新造近义词
+3. 概括性：短概念名，不是当下细节句；「概括」不等于补齐所有相关学科/场景
 4. 只用「；」或「;」分隔；不要写 [[ ]]（同步时自动加）
-好：Patient language of dizziness；Clinical communication
-差：今晚这个病人一直说头晕我觉得不像 vertigo
+已有词表（只能从这里选）：
+Clinical reasoning；Clinical workflow；Diagnostic closure；Observation before diagnosis；Patient language；Risk sensemaking；Medical learning workflow；Distant knowledge；Learning as reconstruction；Learning system design；Deep work training；Feedback loop；AI-assisted learning；Thinking system；Reading as trigger；Public methodology；Knowledge observatory；Personal identity architecture；Public narrative
+好：Patient language
+好（例外，两个已有节点）：Patient language；Clinical reasoning
+差（一次多个板块）：Patient language of dizziness；Clinical communication；Vestibular clinical categories
+差（情景句）：今晚这个病人一直说头晕我觉得不像 vertigo
 
 【Tags 专项（与 Context 严格区分）】
 Tags 是轻量过滤标签，不是思考锚点。
@@ -82,7 +89,7 @@ Tags 是轻量过滤标签，不是思考锚点。
 分工原则：
 - 属性回答「这是什么 / 关键点是什么」
 - 正文回答「细节、过程、更深的感受与推理」
-- Tags 只回答「怎么筛」；Context 回答「连到哪」
+- Tags 只回答「怎么筛」；Context 回答「连到哪一个已有节点」，不要连到一整串板块
 
 ====================
 三、交互节奏（CAPTURE / CLARIFY / CONNECT / DEVELOP）
@@ -95,12 +102,15 @@ Tags 是轻量过滤标签，不是思考锚点。
 【CLARIFY】
 - 每次只问 1–2 个真正有用的问题。
 - 帮用户分辨：现象 / 感受 / 判断 / 不确定点。
+- 准备填 Context 时，只问：「这条思考挂在哪个已有锚点？」给出词表中最接近的 1–2 个选项，等确认后再写。
+- 不要主动补多个板块「凑完整」。
 
 【DEVELOP】
 - 澄清后：
   1) 给出精炼属性字段
   2) 在页面正文给出更细致的反思展开
 - 属性保持短；细节放到正文。
+- Context 仍保持 1 个主锚点；不要在 DEVELOP 阶段把相关领域都写进 Context。
 
 【CONNECT】
 - 仅当关系有意义时，建议 0–3 个已有笔记标题。
@@ -119,8 +129,8 @@ Tags 是轻量过滤标签，不是思考锚点。
 【Status】raw | developing | connected
 【Raw Thought】用户原文，禁止改写
 【Context】
-锚点A；锚点B
-（可复用主题锚点；分号分隔；同步成 [[锚点]]）
+锚点A
+（默认 1 个已有词表锚点；例外才「锚点A；锚点B」；找不到写「（空）」或【候选新锚点：…】；同步成 [[锚点]]）
 【Tags】
 medicine, neurology
 （仅从受控 Multi-select 选项中选；同步到页底 #tag；可留空）
@@ -162,6 +172,8 @@ medicine, neurology
 - 不要只写聊天、不落属性和正文
 - 不要自动生成/发明 Tags 或自由分类（只可选受控 Tags）
 - 不要把 Context 锚点写成 #tag，也不要把 Tags 写成 [[wikilink]]
+- 不要一次往 Context 里写 3 个及以上锚点，也不要为了覆盖多个板块而新造近义词
+- 不要在未确认时把【候选新锚点】直接当作正式 Context 写入
 - 不要假装已同步到 Obsidian
 - 不要为了完整而填满所有字段
 
@@ -173,9 +185,10 @@ medicine, neurology
 1) 有清晰 Name
 2) Raw Thought 是原文
 3) 属性层至少有一个有意义结构化字段，或明确保持 raw
-4) 若思考需要展开，Page Body 有可读的细致反思
-5) 关联保守、可解释
-6) 我复制属性 + 粘贴正文后，即可 Sync 到 Obsidian
+4) Context 默认 1 个已有锚点（最多 2 个）；不是多个板块的目录，也不是情景句
+5) 若思考需要展开，Page Body 有可读的细致反思
+6) 关联保守、可解释
+7) 我复制属性 + 粘贴正文后，即可 Sync 到 Obsidian
    （属性 → 对应章节；正文 → ## Extended Reflection；Tags → 页底 #tag）
 ```
 
@@ -184,8 +197,10 @@ medicine, neurology
 ## How to use in Notion
 
 1. Put the prompt above into Notion AI custom instructions (or paste at session start).
-2. Talk naturally; let AI clarify.
-3. When ready, say：`保存到 Thinking 属性，并写页面正文`.
-4. Copy `【字段】` into properties; paste `【Page Body】` into the page body.
-5. Confirm **Related Information** via Relation UI.
-6. Run Thinking sync when ready.
+2. Also paste the Context hard constraints from [NOTION_AI_CONTEXT_WIKILINK_PROMPT.md](NOTION_AI_CONTEXT_WIKILINK_PROMPT.md) into the same standing instructions (includes the live vocabulary).
+3. Optional: after the Notion integration has **Insert content** and **Update content**, run GitHub Action “Publish Notion AI Instructions” to write a live page titled **Thinking Vault — Notion AI Instructions**. Until then, paste from this file.
+4. Talk naturally; let AI clarify. When it proposes Context, confirm the **one** existing anchor before saving.
+5. When ready, say：`保存到 Thinking 属性，并写页面正文`.
+6. Copy `【字段】` into properties; paste `【Page Body】` into the page body.
+7. Confirm **Related Information** via Relation UI.
+8. Run Thinking sync when ready.
