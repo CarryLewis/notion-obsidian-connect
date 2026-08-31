@@ -32,4 +32,4 @@ updated: 2026-08-25
 - 患者具体是旋转感还是头重脚轻？
 - 临床沟通中「头晕」如何被误分类？
 
-#clinical #neurology
+#clinical
