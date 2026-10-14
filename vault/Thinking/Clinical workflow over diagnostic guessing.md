@@ -2,7 +2,7 @@
 source: notion
 source_id: "667ee682-6e16-4058-8b26-ffbf34a7651d"
 created: 2026-08-23
-updated: 2026-08-25
+updated: 2026-10-14
 ---
 
 # Clinical workflow over diagnostic guessing
@@ -32,6 +32,10 @@ updated: 2026-08-25
 - 某个症状在真实临床中对应的 standard workup 是什么？
 - 哪些 dangerous diagnosis 必须优先排除？
 - 我什么时候是在用猜测替代流程？
+
+## Later Reflection
+
+2026-10-14：GW 2.4 中，COVID-19 肺炎患者在改善后、准备撤机时突然低氧并心动过速，具体呼应了“先识别危险、再检验假设，而不是用熟悉机制替代流程”的思考。必须排除肺栓塞不等于已确诊；完整题干、原始作答与推理见正文。
 
 ## Extended Reflection
 
@@ -72,5 +76,102 @@ updated: 2026-08-25
 - 我有没有因为一个早期判断而停止继续收集信息？
 
 这不是否定病例讨论的价值，而是要区分教学场景和临床实践：教学病例训练 recognition；真实临床要求安全、完整、可追踪的 workflow。
+
+---
+
+### 后续案例补充｜GW 2.4：改善后突然低氧与心动过速
+
+补充日期：2026-10-14
+
+来源：Untitled，病例 2 与问题 2.4。以下保留题干和原始作答；中文解析与关联为课后整理，不代表原题已给出的官方答案，也不代表真实患者的诊断已经成立。
+
+1. 完整病例背景与 2.4 原题
+
+病例背景原文
+
+> A 49 year old man with Type 2 diabetes, hypertension and obesity (BMI 36 kg/m2) is admitted unwell with Covid-19. CXR reveals peripheral opacities affecting the lower lobes suggestive of consolidation from a pneumonia. O2 saturation is 95 % on 4 litres O2 by nasal cannulae.
+
+病例中机械通气期间的血气资料
+
+> An arterial blood gas obtained while the patient is mechanically ventilated is shown:
+
+pH: 7.47 (7.35-7.45)
+PaCO2: 4.15 kPa (4.6-6.4)
+PaO2 - 8 kPa (11-15)
+HCO3 – 22 mmol/L (22-30)
+
+这组血气属于前面的病例阶段，不能当作第 8 天突然恶化时的新血气；题干也没有提供当时的 FiO₂、血压或其他床旁评估结果。
+
+2.4 原题
+
+> Over the following week patient’s condition improves. He is about to be weaned off the ventilator on day 8 when his O2 saturation abruptly falls again, and he becomes markedly tachycardic with HR= 120 bpm. What condition could have occurred to cause this sudden change in clinical condition and oxygen status and must be ruled out?
+
+中文理解：49 岁男性，患 T2D、高血压与肥胖，因 COVID-19 肺炎入院并接受机械通气。随后一周病情改善，但在第 8 天准备撤机时，血氧饱和度突然再次下降，伴明显心动过速。需要优先排除什么新发生的危险情况？
+
+2. 当时的原始作答与批注
+
+原始作答（照录）
+
+unclear:曾考虑是Haldane effect,在拔出呼吸机之后氧气发生变化之后造成的影响。但与此题情景不符
+
+原有批注（照录）
+
+与临床情景较为贴合的疾病，与临床见习时所得出的思考问题（thinking valut)很相似
+
+这些材料作为本次案例证据保存在正文；原条目的 Raw Thought 保持不变，不用新的解析覆盖当时的临床见习反思。
+
+3. 题目解析｜为什么必须排除肺栓塞
+
+核心答案：需要优先排除 pulmonary embolism（肺栓塞，PE）。 关键不是单独看到“低氧”，而是把“原本改善 → 突然恶化”的时间进程，与心动过速和血栓风险背景合起来理解。
+
+- 支持提高警惕的背景：COVID-19 的血栓风险、肥胖，以及住院／机械通气期间可能活动减少。题干并未明确证明“长期卧床”，只能把活动减少作为待核实背景；T2D 与高血压不是本题中最直接、最有判别力的静脉血栓线索。
+
+- 机制链：肺血管被栓子阻塞 → 部分肺区域仍有通气但灌注下降 → 高 V/Q 区域及肺泡无效腔增加，整体气体交换失衡 → 可出现低氧血症；缺氧和循环负担等可伴心动过速。低氧的形成不能简单等同于“无效腔增加”一个环节。
+
+- 不确定性：突然低氧与心动过速并不特异。“必须排除 PE”是风险判断，不是确诊。没有检查证据，不能补写“已经发生 DVT／PE”。
+
+- 必须保留的其他方向：机械通气背景下的气胸，气道阻塞／分泌物、导管或呼吸机回路问题等，也可造成急性低氧。气胸是危险鉴别之一，不是仅凭正压通气就成立的诊断。
+
+4. 为什么 Haldane effect 不是本题合适的首要解释
+
+Haldane effect（霍尔丹效应）描述的是 Hb 的氧合状态如何影响 CO₂ 携带：Hb 氧合增加时，携带 CO₂ 和缓冲 H⁺ 的能力下降，促进 CO₂ 释放；在通气受限时，氧疗可借此对 PaCO₂ 升高作出贡献。
+
+但本题存在两个不匹配：
+
+1. 时间线不匹配：“about to be weaned”是准备撤机，不是已经拔管，也没有明确写供氧突然改变。不能先补出一个题干没有发生的事件，再据此解释恶化。
+
+1. 解释对象不匹配：题目突出的是突然低氧与心动过速，要求识别必须排除的危险情况；单用 CO₂ 携带机制，不能充分解释这组临床变化。
+
+问题不在于“想到机制”本身，而在于：熟悉的机制可能抢先成为解释，使时间线、风险背景和其他危险原因没有进入判断。这呼应了原来的担忧，但不能从一次作答就断言自己一定形成了稳定的 diagnostic closure（诊断闭合）。
+
+5. 回到当时留下的三个问题
+
+这里也需要保留一个边界：workflow 不是不分场景地做完所有检查，而是按危险程度和临床信息，有序选择会改变判断与处理的步骤。 原条目中的眩晕检查举例应理解为当时的经验记录，不应推广为“所有眩晕都必须做头颅 CT／前庭检查”的通用规则。
+
+6. 与另外两条思考的联系
+
+反向推理入口：Forward and backward reasoning and distance from the object
+
+知道“PE → 气体交换异常”是 A→B；从“改善后突然低氧＋心动过速＋血栓风险背景”出发，建立包含 PE 的鉴别是 B→A。后者不是把机制倒着背，而是结合时间进程、风险背景、判别线索和危险程度。多种疾病可产生相似表现，反向推理不能给出一对一证明。
+
+风险入口感：看似平稳的晕厥与 ST 段抬高
+
+两次情境的共同点不是疾病相同，而是：不能用“之前平稳／正在好转”抵消当前的危险信号，也不能把某个异常直接当成确诊。晕厥病例中的 ECG 异常和本题中的突然低氧，都要求重新打开评估，而不是急于关闭解释。
+
+7. 保留为后续检验的问题
+
+这道题具体呼应了先前的思考，但不证明已经掌握真实临床决策，也不独立验证整套原则。
+
+- 如果不先告诉我“肺栓塞”，我能否从急性低氧这个入口，说出需要立即核实的床旁信息与危险原因？
+
+- 哪些新证据会提高或降低 PE 的可能性，并改变下一步检查／处理？
+
+- 下一次遇到熟悉机制时，我能否先问：“它的前提真的发生了吗？它解释了哪些信息，还有哪些没有解释？”
+
+本次连接留下的原则：诊断假设用来指导信息收集，而不是替代信息收集；机制用来检验假设，而不是替代风险评估。
+
+## Connections
+
+[[GW 2.4 从突然低氧到危险诊断排除]]
 
 #medicine #clinical
