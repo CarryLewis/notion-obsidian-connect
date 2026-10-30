@@ -2,7 +2,7 @@
 source: notion
 source_id: "4380b404-97f2-4ddf-9b8b-704cd38b8ba5"
 created: 2026-10-17
-updated: 2026-10-17
+updated: 2026-10-30
 ---
 
 # V. S. Ramachandran 人物与研究
@@ -21,21 +21,21 @@ updated: 2026-10-17
 
 ## 主要研究地图
 
-上述研究方向及代表出版物可在 UCSD 官方论文列表中核对；表中的问题表述与阅读边界是本笔记的整理。[1]
+上述研究方向及代表出版物可在 UCSD 官方论文列表中核对；表中的问题表述与阅读边界是本笔记的整理。1
 
 ### 镜像箱原始实验具体发现了什么？
 
-1996 年，Ramachandran 与 Diane Rogers-Ramachandran 报告了 10 名患者的实验观察：6 名患者在观看健手镜像运动时感到幻肢运动；5 名有疼痛性握拳痉挛的患者中，4 名借镜像促进「张手」后痉挛缓解；部分患者还出现了定位明确的触觉转移。这些发现支持视觉与身体感觉相互作用，但不是大型随机对照试验，也不能把「4 名痉挛缓解」换算为所有幻肢痛患者的治疗成功率。[2]
+1996 年，Ramachandran 与 Diane Rogers-Ramachandran 报告了 10 名患者的实验观察：6 名患者在观看健手镜像运动时感到幻肢运动；5 名有疼痛性握拳痉挛的患者中，4 名借镜像促进「张手」后痉挛缓解；部分患者还出现了定位明确的触觉转移。这些发现支持视觉与身体感觉相互作用，但不是大型随机对照试验，也不能把「4 名痉挛缓解」换算为所有幻肢痛患者的治疗成功率。2
 
 ## 代表论文与建议阅读顺序
 
-书目信息依据 UCSD 官方列表与 1996 年论文的 PubMed 记录核对；这里核对的是文献身份，并不表示已逐篇阅读全文。[1][2]
+书目信息依据 UCSD 官方列表与 1996 年论文的 PubMed 记录核对；这里核对的是文献身份，并不表示已逐篇阅读全文。1
 
 ## 著作与资料入口
 
 - 本次整理的阅读起点：用户提供的《脑中魅影》（Phantoms in the Brain）相关介绍。
 
-- The Emerging Mind（2003）与 The Tell-Tale Brain: A Neuroscientist’s Quest for What Makes Us Human（2011）列于 UCSD 官方出版物页面，可作为继续了解其思想的入口。[1]
+- The Emerging Mind（2003）与 The Tell-Tale Brain: A Neuroscientist’s Quest for What Makes Us Human（2011）列于 UCSD 官方出版物页面，可作为继续了解其思想的入口。1
 
 - UCSD 官方人物介绍与代表论文入口
 
