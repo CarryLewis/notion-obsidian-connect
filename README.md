@@ -1,99 +1,27 @@
-# Research Brief Studio — Personal Observatory
+# Personal Knowledge Bridge · 个人知识库联动
 
-**Thinking Vault (priority):** [`docs/architecture/THINKING_VAULT_ARCHITECTURE.md`](docs/architecture/THINKING_VAULT_ARCHITECTURE.md) — Notion property columns → `Thinking/*.md` one-way sync.
+我用这个仓库记录 Notion、Obsidian 和印象笔记之间的内容怎么流动，以及这套工作流怎样在本机部署。这里放连接器、同步规则、运行环境和验收步骤。资料的原件留在各自的平台，需要沉淀的内容再经过整理，进入独立的个人知识库。
 
-**Obsidian-facing architecture:** [`docs/architecture/OBSIDIAN_CONSTITUTION_V1_1.md`](docs/architecture/OBSIDIAN_CONSTITUTION_V1_1.md)  
-**System architecture (Lake / KO / Lifecycle / Graph Engine):** [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)  
-**Product Capture · Annotate · Publish:** [`docs/PRODUCT_v1.md`](docs/PRODUCT_v1.md)
+## 各平台的职责
 
-Layers:
+- **Notion** 用于捕捉和整理思考。Thinking Vault 中的属性和正文是同步笔记的编辑来源。
+- **Obsidian** 用于本地 Markdown 阅读、链接和图谱探索。当前可运行的链路是 **Notion → Obsidian**。
+- **印象笔记** 保存历史笔记与剪藏。先从少量 ENEX 导出开始，核对内容、附件和来源，再决定哪些材料值得迁入知识库。这条接入路径仍在设计。
 
-1. **Content Lake** — immutable originals (`DATA_DIR/content_lake`) — backend only
-2. **Knowledge Database** — SQLite Knowledge Objects, edges, proposals
-3. **Graph Engine** — cognitive projection (JSON API; propose links; no infrastructure nodes)
-4. **Cognitive Vault (Obsidian)** — `Information/` · `Thinking/` · `Research/`
+[平台联动、数据边界与接入状态](docs/platforms/README.md)
 
-```text
-Observe → Capture → Information
-Experience → Conversation → Thinking
-Connections accumulate → Research Brief (synthesis)
-```
+## 从哪里开始
 
-## Thinking Vault on GitHub (scheduled sync)
+1. **部署与复现**。从 [部署环境](docs/deployment/README.md) 了解 macOS、Python、本地 vault 和 SQLite 的角色，再按 [本地部署与验收](docs/LOCAL_SETUP.md) 跑一个隔离样例。
+2. **交给 AI**。让 AI 先读 [AGENTS.md](AGENTS.md)，再按 [AI 阅读入口](docs/ai/README.md) 选择部署、故障排查或平台接入任务。
+3. **查看实现**。从 [架构与现有模块](docs/architecture/README.md) 找到同步字段、Markdown 生成、可选的镜像与网站发布。
 
-Primary runtime for Notion → vault sync is **GitHub Actions** (hourly + manual).
+## 仓库分区
 
-1. Repo Settings → Secrets and variables → Actions → add:
-   - `NOTION_TOKEN`
-   - `NOTION_THINKING_DATABASE_ID`
-2. Workflow: [`.github/workflows/thinking-sync.yml`](.github/workflows/thinking-sync.yml)
-3. Writes into the repo’s [`vault/`](vault/) and commits when notes change.
-4. Actions → **Thinking Vault Sync** → Run workflow (optional manual trigger).
+- `docs/platforms/` 记录平台职责、数据方向和各链路的实现状态。
+- `docs/deployment/` 记录机器环境、部署方式、配置项和验证结果。
+- `docs/ai/` 提供给编程 AI 的任务入口和验收口径。
+- `docs/architecture/` 记录数据契约、模块关系及原 Research Brief Studio 的运行入口。
+- `backend/`、`scripts/` 和 `.github/workflows/` 存放同步实现、本地脚本和 GitHub 工作流。`extension/`、`jobs/`、`site/` 保留原有的采集和发布能力，`vault/` 是仓库中的镜像目录。
 
-SQLite sync index is cached across runs; if the cache is cold, sync hydrates identity from on-disk `source_id` / `.thinking-folder` sidecars.
-
-Local CLI remains available for debugging.
-
-## Public website (Quartz + Cloudflare)
-
-Publish the Obsidian-style garden from `vault/` with Quartz:
-
-- Code: [`site/`](site/)
-- Guide: [`docs/architecture/QUARTZ_CLOUDFLARE_DEPLOY.md`](docs/architecture/QUARTZ_CLOUDFLARE_DEPLOY.md)
-- Connect the repo to **Cloudflare Pages** (root directory `site`, build `npm ci && npm run build`, output `public`), then bind your existing domain.
-
-AI proposes relationships; humans accept meaningful links. No Inbox dump. No domain folder taxonomy.
-
-## Quick start
-
-```bash
-cd backend && source .venv/bin/activate
-
-# Thinking Vault: Notion → vault/Thinking/ (local debug)
-# (requires NOTION_TOKEN + NOTION_THINKING_DATABASE_ID; see docs/architecture/NOTION_THINKING_DATABASE_CHECKLIST.md)
-python -m app.cli.thinking_sync --vault ../vault
-python -m app.cli.thinking_sync --status
-
-# Capture → Lake + KO; Library/save writes Information/ notes
-python -m app.cli.collect --job ../jobs/nature_migraine.yaml --no-media
-
-# Lifecycle (backend; not daily vault bureaucracy)
-python -m app.cli.lifecycle backfill
-python -m app.cli.lifecycle evaluate --notebook nb_xxx
-python -m app.cli.lifecycle proposals
-
-# Workspace sync → Thinking / Research cognitive folders
-python -m app.cli.workspace sync --notebook nb_xxx --vault ../vault
-
-# Cognitive graph (portable JSON — propose-only AI links)
-python -m app.cli.graph sync --notebook nb_xxx
-python -m app.cli.graph view --view research --notebook nb_xxx --fresh
-python -m app.cli.graph neighborhood --ko ko_xxx --depth 2
-python -m app.cli.graph metrics --notebook nb_xxx
-python -m app.cli.graph suggest-links --notebook nb_xxx
-
-# API
-uvicorn app.main:app --app-dir backend --reload --port 8000
-```
-
-### Vault layout (Constitution V1.1)
-
-```text
-Information/            # world memory (readable captures)
-Thinking/               # Notion-synced + personal fragments
-Research/               # synthesis / briefs
-Archive/                # cold legacy + Digests
-90_Meta/
-```
-
-## Config
-
-| File | Role |
-|------|------|
-| [`backend/configs/workspace.yaml`](backend/configs/workspace.yaml) | Cognitive folders, roles, Thinking Vault property map |
-| [`backend/configs/lifecycle.yaml`](backend/configs/lifecycle.yaml) | Stages, scoring, signal connectors, AI flags |
-| [`backend/configs/graph.yaml`](backend/configs/graph.yaml) | Graph views, weight formula, auto-sync |
-| [`backend/configs/channels.yaml`](backend/configs/channels.yaml) | Connectors |
-| [`.env.example`](.env.example) | `DEFAULT_VAULT_PATH`, Notion tokens, LLM, inbound, digest |
-
-Details: **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** · **[docs/architecture/THINKING_VAULT_ARCHITECTURE.md](docs/architecture/THINKING_VAULT_ARCHITECTURE.md)**.
+这个仓库是公开的。本地部署时，请把私人 vault、印象笔记原始导出、凭据和同步索引留在仓库外或 Git 忽略目录中。GitHub Actions 镜像会提交 Markdown 到 `vault/`，适用于明确选择公开的内容。

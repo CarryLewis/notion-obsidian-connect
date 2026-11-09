@@ -1,7 +1,7 @@
 # Notion Thinking Database — Manual Setup Checklist
 
 **Purpose:** Create the Notion database that Thinking Vault V1 syncs from.  
-**Contract:** Property columns are the content source of truth. Page body is not synced in V1.
+**Contract:** Property columns are the structured source of truth. Page body is exported as Extended Reflection for ordinary notes.
 
 Do **not** auto-create this schema from the API in V1 — set it up once by hand.
 
@@ -64,23 +64,9 @@ vault/Thinking/{Name}.md  (committed by Actions when changed)
 
 GitHub setup: add repository secrets `NOTION_TOKEN` + `NOTION_THINKING_DATABASE_ID`, then enable [`.github/workflows/thinking-sync.yml`](../../.github/workflows/thinking-sync.yml).
 
-### Local Obsidian (iCloud Thinking valut) — direct Notion sync
+### Local Obsidian
 
-Preferred local path: **Notion API → your Obsidian vault** (no GitHub hop).
-
-See [`LOCAL_NOTION_OBSIDIAN_SYNC.md`](./LOCAL_NOTION_OBSIDIAN_SYNC.md).
-
-```text
-Notion Thinking DB  →  scripts/sync-to-local-obsidian.sh  →  OBSIDIAN_VAULT/Thinking/
-```
-
-1. Clone once: `git clone https://github.com/CarryLewis/research_brief.git ~/Documents/research_brief`
-2. Put `NOTION_TOKEN` + `NOTION_THINKING_DATABASE_ID` in `~/Documents/research_brief/.env`
-3. Set `OBSIDIAN_VAULT` to Obsidian → Manage vaults path for **Thinking valut**
-4. Run [`scripts/sync-to-local-obsidian.sh`](../../scripts/sync-to-local-obsidian.sh); optional macOS LaunchAgent every 15 min
-5. GitHub Actions can still update the **repo** `vault/` for backup / Quartz — that is separate from iCloud Obsidian
-
-Do **not** `git init` inside the iCloud Obsidian folder.
+Follow the [local setup and verification guide](../LOCAL_SETUP.md) for an isolated first sync. The [macOS direct sync notes](./LOCAL_NOTION_OBSIDIAN_SYNC.md) cover the older scheduler and launcher.
 
 - Empty properties → section omitted
 - `Related Information` → `## Connections` with `[[Target Name]]` (ordinary notes)

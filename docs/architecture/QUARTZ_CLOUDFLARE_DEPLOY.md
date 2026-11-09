@@ -45,7 +45,7 @@ npm run build:serve
 ## 2. Cloudflare Pages 连接 GitHub（推荐）
 
 1. 打开 [Cloudflare Dashboard](https://dash.cloudflare.com/) → **Workers & Pages** → **Create** → **Pages** → **Connect to Git**
-2. 选择仓库 `CarryLewis/research_brief`（或你的 fork）
+2. 选择仓库 `CarryLewis/personal-knowledge-bridge`（或你的 fork）
 3. 构建配置：
 
 | 项 | 值 |
