@@ -54,7 +54,7 @@ fi
 
 if [[ ! -d "$REPO/backend/app" ]]; then
   echo "ERROR: research_brief backend not found at: $REPO" >&2
-  echo "Clone: git clone https://github.com/CarryLewis/research_brief.git \"$REPO\"" >&2
+  echo "Clone: git clone https://github.com/CarryLewis/personal-knowledge-bridge.git \"$REPO\"" >&2
   exit 1
 fi
 

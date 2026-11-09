@@ -1,0 +1,6 @@
+---
+description: Personal Knowledge Bridge project context, deployment and verification entry points
+alwaysApply: true
+---
+
+Read [AGENTS.md](../../AGENTS.md) for the platform boundaries, deployment entry points, and acceptance criteria.

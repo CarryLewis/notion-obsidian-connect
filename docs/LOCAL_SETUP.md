@@ -7,8 +7,8 @@
 ## 1. 获取代码和安装依赖
 
 ```bash
-git clone https://github.com/CarryLewis/notion-obsidian-connect.git
-cd notion-obsidian-connect
+git clone https://github.com/CarryLewis/personal-knowledge-bridge.git
+cd personal-knowledge-bridge
 python3.12 --version
 python3.12 -m venv .venv
 .venv/bin/python -m pip install -r backend/requirements.txt
