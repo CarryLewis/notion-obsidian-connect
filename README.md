@@ -19,9 +19,15 @@ Experience → Conversation → Thinking
 Connections accumulate → Research Brief (synthesis)
 ```
 
-## Thinking Vault on GitHub (scheduled sync)
+## Deploy Thinking Vault locally
 
-Primary runtime for Notion → vault sync is **GitHub Actions** (hourly + manual).
+[本地部署与验收指南 / Local setup](docs/LOCAL_SETUP.md) covers Python setup, a read-only Notion integration, an isolated Obsidian vault, and a repeatable smoke test. Use the prompt at the end of the guide with your coding agent.
+
+> Follow `docs/LOCAL_SETUP.md` to set up and verify Notion → Obsidian locally. Start with a separate test database and vault, and report the result of each check.
+
+## Optional GitHub Actions mirror
+
+GitHub Actions can mirror Notion → the repository vault (hourly + manual). Use this path only when the synced content is intended for the repository and any connected site.
 
 1. Repo Settings → Secrets and variables → Actions → add:
    - `NOTION_TOKEN`
@@ -31,8 +37,6 @@ Primary runtime for Notion → vault sync is **GitHub Actions** (hourly + manual
 4. Actions → **Thinking Vault Sync** → Run workflow (optional manual trigger).
 
 SQLite sync index is cached across runs; if the cache is cold, sync hydrates identity from on-disk `source_id` / `.thinking-folder` sidecars.
-
-Local CLI remains available for debugging.
 
 ## Public website (Quartz + Cloudflare)
 
@@ -44,15 +48,10 @@ Publish the Obsidian-style garden from `vault/` with Quartz:
 
 AI proposes relationships; humans accept meaningful links. No Inbox dump. No domain folder taxonomy.
 
-## Quick start
+## Optional Research Brief Studio commands
 
 ```bash
 cd backend && source .venv/bin/activate
-
-# Thinking Vault: Notion → vault/Thinking/ (local debug)
-# (requires NOTION_TOKEN + NOTION_THINKING_DATABASE_ID; see docs/architecture/NOTION_THINKING_DATABASE_CHECKLIST.md)
-python -m app.cli.thinking_sync --vault ../vault
-python -m app.cli.thinking_sync --status
 
 # Capture → Lake + KO; Library/save writes Information/ notes
 python -m app.cli.collect --job ../jobs/nature_migraine.yaml --no-media
