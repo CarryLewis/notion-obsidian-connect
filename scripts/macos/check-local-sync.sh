@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Diagnose Notion → iCloud Obsidian auto-sync on this Mac.
+# Diagnose Notion → Obsidian auto-sync on macOS.
 set -u
 
-REPO="${RESEARCH_BRIEF_REPO:-$HOME/Documents/research_brief}"
-VAULT="${OBSIDIAN_VAULT:-$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents}"
-PLIST="$HOME/Library/LaunchAgents/com.carrylewis.thinking-vault-sync.plist"
-LOG="$HOME/Library/Logs/thinking-vault-sync.log"
-LABEL="com.carrylewis.thinking-vault-sync"
+REPO="${RESEARCH_BRIEF_REPO:-$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd -P)}"
+VAULT="${OBSIDIAN_VAULT:-${DEFAULT_VAULT_PATH:-}}"
+LABEL="${THINKING_LAUNCHAGENT_LABEL:-io.personal-knowledge-bridge.thinking-sync-daily}"
+PLIST="${THINKING_LAUNCHAGENT_PLIST:-$HOME/Library/LaunchAgents/$LABEL.plist}"
+LOG="${SYNC_LOG:-$HOME/Library/Logs/thinking-vault-sync.log}"
 UID_NUM="$(id -u)"
 
 echo "=== Thinking Vault local sync check ==="
@@ -21,7 +21,7 @@ warn() { echo "WARN $1"; warn=$((warn+1)); }
 fail() { echo "FAIL $1"; bad=$((bad+1)); }
 
 # 1) repo + script
-if [[ -d "$REPO/.git" ]]; then pass "git repo present"; else fail "missing clone at $REPO"; fi
+if [[ -e "$REPO/.git" ]]; then pass "git repo present"; else fail "missing clone at $REPO"; fi
 if [[ -x "$REPO/scripts/sync-to-local-obsidian.sh" ]]; then
   pass "sync script executable"
 elif [[ -f "$REPO/scripts/sync-to-local-obsidian.sh" ]]; then
@@ -31,16 +31,19 @@ else
 fi
 
 # 2) .env secrets (do not print values)
-ENV_FILE="$REPO/.env"
-if [[ -f "$ENV_FILE" ]]; then
-  pass ".env present"
-  if grep -q '^NOTION_TOKEN=ntn_' "$ENV_FILE" 2>/dev/null; then pass "NOTION_TOKEN looks set"; else fail "NOTION_TOKEN missing/invalid in .env"; fi
-  if grep -q '^NOTION_THINKING_DATABASE_ID=' "$ENV_FILE" 2>/dev/null; then pass "NOTION_THINKING_DATABASE_ID present"; else fail "NOTION_THINKING_DATABASE_ID missing"; fi
-else
-  fail ".env missing at $ENV_FILE"
-fi
+ENV_FILE="${THINKING_ENV_FILE:-$REPO/.env}"
+for field in NOTION_TOKEN NOTION_THINKING_DATABASE_ID; do
+  if [[ -n "${!field:-}" ]] || { [[ -f "$ENV_FILE" ]] && grep -Eq "^${field}=.+" "$ENV_FILE"; }; then
+    pass "$field configured"
+  else
+    fail "$field missing from process environment and .env"
+  fi
+done
 
 # 3) vault path
+if [[ -z "$VAULT" && -f "$PLIST" ]]; then
+  VAULT="$(/usr/libexec/PlistBuddy -c 'Print :EnvironmentVariables:OBSIDIAN_VAULT' "$PLIST" 2>/dev/null || true)"
+fi
 if [[ -d "$VAULT" ]]; then
   pass "Obsidian vault directory exists"
   if [[ -d "$VAULT/Thinking" ]]; then
@@ -50,7 +53,7 @@ if [[ -d "$VAULT" ]]; then
     warn "Thinking/ folder not created yet (run sync once)"
   fi
 else
-  fail "vault path not found: $VAULT"
+  fail "set OBSIDIAN_VAULT to an existing vault, or configure it in the LaunchAgent plist"
 fi
 
 # 4) LaunchAgent
@@ -76,16 +79,13 @@ fi
 # 5) recent log
 if [[ -f "$LOG" ]]; then
   pass "log file exists: $LOG"
-  echo "----- last 25 log lines -----"
-  tail -25 "$LOG" | sed 's/^/     /'
-  echo "----- end log -----"
   if grep -q 'OK: Notion synced' "$LOG" 2>/dev/null; then
     pass "log contains a successful Notion sync"
   else
     warn "no 'OK: Notion synced' yet — run sync once or check errors above"
   fi
-  if grep -qiE 'ERROR|7890|NOTION_TOKEN|Traceback' "$LOG" 2>/dev/null; then
-    warn "log has error-like lines (see tail above)"
+  if grep -qiE 'ERROR|Traceback' "$LOG" 2>/dev/null; then
+    warn "log contains errors (inspect locally)"
   fi
 else
   warn "no log yet at $LOG (LaunchAgent may not have run)"
@@ -93,7 +93,7 @@ fi
 
 # 6) proxy hint
 if git config --global --get http.proxy >/dev/null 2>&1 || git config --global --get https.proxy >/dev/null 2>&1; then
-  warn "git global proxy still set (can break unattended pulls/API if Clash is off)"
+  warn "git global proxy is set (verify availability for unattended jobs)"
 fi
 
 echo

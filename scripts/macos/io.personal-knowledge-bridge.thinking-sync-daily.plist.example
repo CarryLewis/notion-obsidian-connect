@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Copy and configure using docs/architecture/MAC_SHORTCUTS_DAILY_SYNC.md. -->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>io.personal-knowledge-bridge.thinking-sync-daily</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/path/to/checkout/scripts/sync-to-local-obsidian.sh</string>
+  </array>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>OBSIDIAN_VAULT</key>
+    <string>/path/to/vault</string>
+    <key>DATA_DIR</key>
+    <string>/path/to/sync-state</string>
+    <key>PATH</key>
+    <string>/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>6</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+</dict>
+</plist>

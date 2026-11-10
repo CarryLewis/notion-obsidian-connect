@@ -1,74 +1,21 @@
-# Local Notion → Obsidian (iCloud Thinking valut)
+# 本地 Notion → Obsidian 同步
 
-**Goal:** Notion Thinking database writes **directly** into your Mac Obsidian vault (iCloud). GitHub Actions can still keep a separate repo backup.
+本地脚本从 Notion 读取数据库内容，并写入指定 vault 的 `Thinking/`。可选的 GitHub Actions 镜像会把 Markdown 写入仓库的 `vault/`，供已选择公开的内容使用。
 
-## Dual pipeline
+## 手动验证
 
-```text
-                         ┌─ (A) Mac script / LaunchAgent ──► iCloud Obsidian “Thinking valut”
-Notion Thinking DB ──────┤
-                         └─ (B) GitHub Actions (hourly) ───► repo vault/  (backup + Quartz)
-```
-
-| Path | Destination | Purpose |
-|------|-------------|---------|
-| **A — local** | iCloud Obsidian vault | Daily reading / graph in Obsidian |
-| **B — GitHub** | `vault/Thinking/` on `main` | Cloud backup + Quartz |
-
-They are independent mirrors of Notion. Local direct sync does **not** replace GitHub backup.
-
-## One-time Mac setup
-
-### 1. Confirm vault path
-
-Obsidian → **Manage vaults** → copy the path for **Thinking valut**.
-
-Your current path (from Manage vaults):
-
-```text
-/Users/carrylewis/Library/Mobile Documents/iCloud~md~obsidian/Documents
-```
-
-Notes land in that folder under `Thinking/`.
-
-### 2. Pull latest code
+1. 先按 [本地部署与验收](../LOCAL_SETUP.md) 准备 Python、测试数据库和独立 SQLite 目录。
+2. 在 Obsidian 的 **Manage vaults** 查看目标 vault 的绝对路径。首次使用空白测试 vault。
+3. 在仓库根目录运行。替换路径占位符，在本机配置 `NOTION_TOKEN` 和 `NOTION_THINKING_DATABASE_ID`。
 
 ```bash
-cd ~/Documents/research_brief
-git pull
+export OBSIDIAN_VAULT="/path/to/test-vault"
+export DATA_DIR="/path/to/test-sync-state"
+bash scripts/sync-to-local-obsidian.sh
 ```
 
-### 3. Put Notion secrets in `.env` (gitignored — never commit)
+脚本从自身位置找到 checkout，可用 `RESEARCH_BRIEF_REPO` 覆盖。目标优先使用已设定的 `OBSIDIAN_VAULT` 或 `DEFAULT_VAULT_PATH`，也可在本机 `.env` 提供。日志在 macOS 默认写到 `~/Library/Logs/thinking-vault-sync.log`，Linux 默认写到 `~/.cache/thinking-vault-sync.log`，可用 `SYNC_LOG` 覆盖。退出码为 0 且日志含 `OK: Notion synced` 后，核对 `Thinking/` 的输出和第二次同步的结果。同步可能按 `source_id` 更新现有文件。
 
-```bash
-cat > ~/Documents/research_brief/.env <<'EOF'
-NOTION_TOKEN=REPLACE_WITH_YOUR_TOKEN
-NOTION_THINKING_DATABASE_ID=51e7fdfd-46f8-4d85-a813-f68b56131615
-EOF
-```
+## 调度
 
-### 4. Run direct sync once
-
-```bash
-export OBSIDIAN_VAULT="/Users/carrylewis/Library/Mobile Documents/iCloud~md~obsidian/Documents"
-chmod +x ~/Documents/research_brief/scripts/sync-to-local-obsidian.sh
-~/Documents/research_brief/scripts/sync-to-local-obsidian.sh
-tail -50 ~/Library/Logs/thinking-vault-sync.log
-```
-
-Open Obsidian → `Thinking/`.
-
-### 5. Auto schedule (pick one)
-
-- **每天 06:00（推荐）**：见 [`MAC_SHORTCUTS_DAILY_SYNC.md`](./MAC_SHORTCUTS_DAILY_SYNC.md)  
-  （Apple 快捷指令，或 `com.carrylewis.thinking-vault-sync-daily` LaunchAgent）
-- **每 15 分钟（旧）**：`scripts/macos/com.carrylewis.thinking-vault-sync.plist.example` — 一般不再需要
-
-## Notes
-
-- Sync **overwrites** Notion-linked notes under `Thinking/` by `source_id`.
-- SQLite index: `~/Documents/research_brief/data/` (kept off iCloud).
-- Do not `git init` inside the iCloud Obsidian folder.
-- SSL errors like `UNEXPECTED_EOF_WHILE_READING` usually mean the network path to Notion is broken.
-  **Fix:** open Clash/Surge (port 7890) *or* ensure direct HTTPS works; the sync script auto-uses 7890 when that port is listening.
-- Rotate the Notion integration secret if it was pasted into chat.
+按 [macOS 调度说明](MAC_SHORTCUTS_DAILY_SYNC.md) 选择快捷指令或 LaunchAgent。其他调度器可执行同一脚本。每个任务应明确解释器、checkout、vault、SQLite 目录和执行身份。对同一 vault 只启用一种调度方式。
