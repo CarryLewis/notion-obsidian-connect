@@ -5,20 +5,19 @@
 # markdown into OBSIDIAN_VAULT/Thinking/.
 #
 # Required:
-#   OBSIDIAN_VAULT  — Obsidian vault root (Manage vaults path)
+#   OBSIDIAN_VAULT or DEFAULT_VAULT_PATH — selected Obsidian vault root
 #   NOTION_TOKEN + NOTION_THINKING_DATABASE_ID — via env or REPO/.env
 #
 # Optional:
-#   RESEARCH_BRIEF_REPO — clone of this repo (code + .env + local SQLite)
+#   RESEARCH_BRIEF_REPO — override the checkout containing this script
 #   PYTHON_BIN          — python interpreter (default: repo .venv or python3)
 #   SYNC_LOG            — log file path
 
 set -euo pipefail
 
-REPO="${RESEARCH_BRIEF_REPO:-$HOME/Documents/research_brief}"
-# Default = Obsidian Manage vaults path for “Thinking valut” (iCloud Documents root).
-# Override with OBSIDIAN_VAULT if Manage vaults shows a different path.
-VAULT="${OBSIDIAN_VAULT:-$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents}"
+REPO="${RESEARCH_BRIEF_REPO:-$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)}"
+VAULT="${OBSIDIAN_VAULT:-${DEFAULT_VAULT_PATH:-}}"
+STATE_DIR="${DATA_DIR:-}"
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
   LOG="${SYNC_LOG:-$HOME/Library/Logs/thinking-vault-sync.log}"
@@ -32,7 +31,7 @@ exec >>"$LOG" 2>&1
 echo "==== $(date -u +%Y-%m-%dT%H:%M:%SZ) Notion → Obsidian direct sync ===="
 
 # Proxy policy:
-# - If Clash/Surge local port is open, USE it (needed to reach Notion in many networks).
+# - If the configured local proxy is listening, use it.
 # - If not open, clear proxy env so a stale 127.0.0.1:7890 does not break SSL.
 _proxy_host="${THINKING_PROXY_HOST:-127.0.0.1}"
 _proxy_port="${THINKING_PROXY_PORT:-7890}"
@@ -53,14 +52,7 @@ else
 fi
 
 if [[ ! -d "$REPO/backend/app" ]]; then
-  echo "ERROR: research_brief backend not found at: $REPO" >&2
-  echo "Clone: git clone https://github.com/CarryLewis/personal-knowledge-bridge.git \"$REPO\"" >&2
-  exit 1
-fi
-
-if [[ ! -d "$VAULT" ]]; then
-  echo "ERROR: Obsidian vault not found: $VAULT" >&2
-  echo "Open Obsidian → Manage vaults and copy the exact path into OBSIDIAN_VAULT." >&2
+  echo "ERROR: checkout is missing backend/app: $REPO" >&2
   exit 1
 fi
 
@@ -76,13 +68,24 @@ else
   echo "WARN: no $ENV_FILE — relying on already-exported env vars"
 fi
 
+VAULT="${VAULT:-${OBSIDIAN_VAULT:-${DEFAULT_VAULT_PATH:-}}}"
+if [[ -z "$VAULT" ]]; then
+  echo "ERROR: set OBSIDIAN_VAULT or DEFAULT_VAULT_PATH to the chosen vault." >&2
+  exit 1
+fi
+if [[ ! -d "$VAULT" ]]; then
+  echo "ERROR: Obsidian vault not found: $VAULT" >&2
+  echo "Open Obsidian → Manage vaults and copy the exact path into OBSIDIAN_VAULT." >&2
+  exit 1
+fi
+
 if [[ -z "${NOTION_TOKEN:-}" || -z "${NOTION_THINKING_DATABASE_ID:-}" ]]; then
   echo "ERROR: NOTION_TOKEN and NOTION_THINKING_DATABASE_ID are required (put them in $ENV_FILE)" >&2
   exit 1
 fi
 
 # Local SQLite sync index (keep off iCloud when possible)
-export DATA_DIR="${DATA_DIR:-$REPO/data}"
+export DATA_DIR="${STATE_DIR:-${DATA_DIR:-$REPO/data}}"
 mkdir -p "$DATA_DIR"
 export DEFAULT_VAULT_PATH="$VAULT"
 export PYTHONPATH="$REPO/backend${PYTHONPATH:+:$PYTHONPATH}"

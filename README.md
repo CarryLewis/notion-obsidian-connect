@@ -60,6 +60,8 @@ flowchart LR
 
 目前可以把 Notion 笔记同步到 Obsidian。印象笔记导入和 Obsidian 写回 Notion 仍在设计中。[查看各平台的接入状态](docs/platforms/README.md)
 
-如果想复用我的配置，可以先用一条样例跑通，也可以把指南交给自己的编程 AI。私人笔记留在自己的笔记库里。[本地部署指南](docs/LOCAL_SETUP.md) · [给 AI 的任务入口](docs/ai/README.md)
+这个仓库提供可复用的连接脚本和部署指南。AI 编程工具从 [AGENTS.md](AGENTS.md) 进入，再按 [AI 部署入口](docs/ai/README.md) 选择任务、填写配置并验证结果。每次部署使用自己指定的账户和数据目录，私人笔记留在自己的笔记库里。
 
-[部署环境](docs/deployment/README.md) · [架构与实现](docs/architecture/README.md) · [AGENTS.md](AGENTS.md)
+手动体验可先用隔离样例运行 [Notion → Obsidian 同步](docs/LOCAL_SETUP.md) 或 [阅读摘录 OCR 校对](docs/platforms/READING_OCR.md)。
+
+[部署环境](docs/deployment/README.md) · [架构与实现](docs/architecture/README.md)

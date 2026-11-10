@@ -10,6 +10,10 @@ Notion 负责捕捉和维护原始思考。同步器以只读连接读取 Thinki
 - [Notion AI 录入规则](../architecture/NOTION_AI_THINKING_CAPTURE_RULES_PROMPT.md)
 - [本地部署及同步验收](../LOCAL_SETUP.md)
 
+## 本地工具 · 阅读摘录 OCR 校对
+
+已有纯文本摘录时，可在仓库外批量生成校对草稿和逐字报告。默认使用离线规则，语义模型只给出建议。[运行和测试方法](READING_OCR.md)
+
 ## 待接入 · 印象笔记 → 本地整理
 
 第一步是用印象笔记客户端按笔记本导出 ENEX，在仓库外保留原件。先选少量样例，检查标题、正文、时间、标签、原始链接和附件。整理过程中给每条材料记录来源、批次和稳定的去重标识。内容和附件核对通过后，再决定是留在原笔记本、生成 Obsidian Markdown，还是收录到个人知识库。[印象笔记官方导出说明](https://help.yinxiang.com/hc/articles/63080)
