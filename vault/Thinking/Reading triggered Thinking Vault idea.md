@@ -46,3 +46,7 @@ updated: 2026-08-25
 当前想法可以先保持为 raw / developing 状态：Thinking Vault 也许不必被拆成信息库、检索信息库和思想集，而可以作为一个统一的思想对象数据库。不同类型的 resources、想法、资料、问题和加工结果，可以在同一个数据库中通过不同属性承载，再经过 Notion AI 进一步加工，最终共同展现或同步到 Obsidian vault 中。
 
 这个想法的重点不是马上重构数据库，而是记录一个系统设计方向：把 Notion 当成 capture + processing layer，把 Obsidian 当成 presentation / durable knowledge layer。
+
+## Connections
+
+[[2026-11-12 工作流进展、学业落差与自我觉察]]
